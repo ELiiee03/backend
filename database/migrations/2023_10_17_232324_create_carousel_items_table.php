@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('carousel_items', function (Blueprint $table) {
             $table->id('carousel_item_id');
-            $table->string('carousel_name')->nullable;
+            $table->string('carousel_name')->nullable();
             $table->string('image_path');
-            $table->string('description')->nullable;
+            $table->string('description')->nullable();
             $table->timestamps();
         });
         Schema::table('carousel_items', function (Blueprint $table) {
