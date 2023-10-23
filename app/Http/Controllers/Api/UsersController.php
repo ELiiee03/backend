@@ -1,45 +1,44 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
-use App\Models\CarouselItems;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\carouselItemsRequest;
+use App\Models\User;
+use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Hash;
 
 
-
-
-class CarouselItemsController extends Controller
+class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
         return User::all();
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    /*public function create()
+    public function create()
     {
         //
-    }*/
+    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(carouselItemsRequest $request)
+    public function store(UserRequest $request)
     {
         // Retrieve the validated input data...
         $validated = $request->validated();
+        $validated['password']= Hash::make($validated['password']);
 
-        $carouselItem = CarouselItems::create($validated);
+        $user = User::create($validated);
 
-        return $carouselItem;
+        return $user;
     }
 
     /**
@@ -47,29 +46,23 @@ class CarouselItemsController extends Controller
      */
     public function show(string $id)
     {
-        //
-        return CarouselItems::findOrFail($id);
+        return User::findOrFail($id);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    /* public function edit(string $id)
+    public function edit(string $id)
     {
-        
-    }*/
+        //
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(CarouselItemsRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
-        $validated = $request->validated();
-
-        $carouselItem = CarouselItems::findOrFail($id);
-        $carouselItem ->update($validated);
-
-        return $carouselItem;
+        //
     }
 
     /**
@@ -77,11 +70,10 @@ class CarouselItemsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
-        $carouselItem = CarouselItems::findOrFail($id);
+        $user = User::findOrFail($id);
 
-        $carouselItem->delete();
+        $user->delete();
  
-        return $carouselItem;
+        return $user;
     }
 }
