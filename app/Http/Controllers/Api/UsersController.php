@@ -49,20 +49,60 @@ class UsersController extends Controller
         return User::findOrFail($id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+    // /**
+    //  * Show the form for editing the specified resource.
+    //  */
+    // public function edit(string $id)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $validated = $request->validated();
+
+        $user->name = $validated['name'];
+        
+        $user->save();
+
+        return $user;
+    }
+
+    /**
+     * Update the email of the specified resource in storage.
+     */
+    public function email(UserRequest $request, string $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validated = $request->validated();
+ 
+        $user->email = $validated['email'];
+         
+        $user->save();
+
+        return $user;
+    }
+
+    /**
+     * Update the password of the specified resource in storage.
+     */
+    public function password(UserRequest $request, string $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validated = $request->validated();
+ 
+        $user->password = Hash::make($validated['password']);
+         
+        $user->save();
+
+        return $user;
     }
 
     /**
