@@ -46,20 +46,40 @@ class MessageController extends Controller
         return Message::findOrFail($id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+    // /**
+    //  * Show the form for editing the specified resource.
+    //  */
+    // public function edit(string $id)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(MessageRequest $request, string $id)
     {
-        //
+        $message = Message::findOrFail($id);
+
+        $validated = $request->validated();
+
+        $message->message = $validated['message'];
+        
+        $message->save();
+
+        return $message;
+    }
+    public function sender(MessageRequest $request, string $id)
+    {
+        $message = Message::findOrFail($id);
+
+        $validated = $request->validated();
+
+        $message->sender = $validated['sender'];
+        
+        $message->save();
+
+        return $message;
     }
 
     /**

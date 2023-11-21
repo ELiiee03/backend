@@ -21,33 +21,46 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(AuthController::class)->group(function () {
-    Route::post('/login', 'login')->name('user.login');
-    Route::post('/logout', 'logout');
+// so e remove na ni sya
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+
+// Public APIs
+Route::post('/login', [AuthController::class, 'login'])->name('user.login');;
+// forda register ni sya nga api
+Route::post('user', [UsersController::class, 'store'])->name('user.store');
+
+
+// routes forda carouselitems nga nasud nas sanctum which means protected na sya
+// Private APIs
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::controller(CarouselItemsController::class)->group(function () {
+        Route::get('/user',             'index');
+        Route::get('/carousel/{id}',    'show');
+        Route::post('carousel',         'store');
+        Route::put('/carousel/{id}',    'update');
+        Route::delete('/carousel/{id}', 'destroy');
+    });
+    // users route
+    Route::controller(UsersController::class)->group(function () {
+        Route::get('/user',                 'index');
+        Route::get('/user/{id}',            'show');
+        Route::put('/user/{id}',            'update')->name('user.update');
+        Route::put('/user/email/{id}',      'email')->name('user.email');
+        Route::put('/user/password/{id}',   'password')->name('user.password');
+        Route::put('/user/image/{id}',      'image')->name('user.image');
+        Route::delete('/user/{id}',         'destroy');
+    });
+    // message routes
+    Route::controller(MessageController::class)->group(function () {
+        Route::get('/message',          'index');
+        Route::get('/message/{id}',     'show');
+        Route::delete('/message/{id}',  'destroy');
+        Route::post('message',          'store');
+    });
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+
 });
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-// routes forda carouselitems
-// Route::get('/user', [CarouselItemsController::class, 'index']);
-Route::get('/carousel/{id}', [CarouselItemsController::class, 'show']);
-Route::post('carousel', [CarouselItemsController::class, 'store']);
-Route::put('/carousel/{id}', [CarouselItemsController::class, 'update']);
-Route::delete('/carousel/{id}', [CarouselItemsController::class, 'destroy']);
-
-// routes forda users
-// Route::get('/user', [UsersController::class, 'index']);
-// Route::get('/user/{id}', [UsersController::class, 'show']);
-// Route::post('user', [UsersController::class, 'store'])->name('user.store');
-// Route::put('/user/{id}', [UsersController::class, 'update'])->name('user.update');
-// Route::put('/user/email/{id}', [UsersController::class, 'email'])->name('user.email');
-// Route::put('/user/password/{id}', [UsersController::class, 'password'])->name('user.password');
-// Route::delete('/user/{id}', [UsersController::class, 'destroy']);
-
-// routes forda message
-Route::get('/message', [MessageController::class, 'index']);
-Route::get('/message/{id}', [MessageController::class, 'show']);
-Route::delete('/message/{id}', [MessageController::class, 'destroy']);
-Route::post('message', [MessageController::class, 'store']);
